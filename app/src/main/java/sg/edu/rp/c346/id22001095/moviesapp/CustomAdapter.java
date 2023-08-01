@@ -51,6 +51,7 @@ public class CustomAdapter extends ArrayAdapter<Movie> {
         } else if ("PG".equals(rating)) {
             String imageUrl = "https://images.immediate.co.uk/production/volatile/sites/28/2019/02/16278-28797ce.jpg?quality=90&webp=true&fit=584,471";
             Picasso.with(context).load(imageUrl).into(ivRating);
+            //ik this is abit scuffed but almost 2359 so i no time
         } else if ("PG13".equals(rating)) {
             ivRating.setImageResource(R.drawable.rating_pg13);
         } else if ("NC16".equals(rating)) {
