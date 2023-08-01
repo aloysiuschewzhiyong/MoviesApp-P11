@@ -65,8 +65,12 @@ public class MainActivityUpdate extends AppCompatActivity {
                 movie.setYear(Integer.parseInt(etYear.getText().toString()));
                 movie.setRating(spinner.getSelectedItem().toString());
 
-                dbh.updateMovie(movie);
-                dbh.close();
+                if(dbh.updateMovie(movie) >0){
+                    Toast.makeText(MainActivityUpdate.this, "Updated", Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK);
+                }else{
+                    Toast.makeText(MainActivityUpdate.this,"Failed", Toast.LENGTH_LONG).show();
+                }
                 finish();
             }
         });

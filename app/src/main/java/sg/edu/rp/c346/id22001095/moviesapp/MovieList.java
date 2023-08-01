@@ -19,6 +19,7 @@ public class MovieList extends AppCompatActivity {
     Button btnBack, btnFilter;
     CustomAdapter ca, caFiltered;
     Spinner spinner;
+    int requestCode = 9;
 
 
     @Override
@@ -55,7 +56,7 @@ public class MovieList extends AppCompatActivity {
                 //Movie movie = movies.get(position);
                 Intent intent = new Intent(MovieList.this, MainActivityUpdate.class);
                 intent.putExtra("movie", movies.get(i));
-                startActivity(intent);
+                startActivityForResult(intent, requestCode);
 
             }
         });
@@ -83,6 +84,23 @@ public class MovieList extends AppCompatActivity {
 
 
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == this.requestCode && resultCode == RESULT_OK){
+            DBHelper db = new DBHelper(MovieList.this);
+
+            ArrayList<Movie> movies = db.getMovies();
+
+            movies.clear();
+            movies.addAll(db.getMovies());
+            db.close();
+            ca = new CustomAdapter(this, R.layout.row, movies);
+            ca.notifyDataSetChanged();
+
+        }
+        super.onActivityResult(requestCode, resultCode,data);
+
+    }
     protected void onResume() {
         super.onResume();
 
@@ -90,13 +108,10 @@ public class MovieList extends AppCompatActivity {
 
         ArrayList<Movie> movies = db.getMovies();
 
-        db.close();
-
         movies.clear();
         movies.addAll(db.getMovies());
-
+        db.close();
         ca = new CustomAdapter(this, R.layout.row, movies);
-
         lvMovies.setAdapter(ca);
         ca.notifyDataSetChanged();
 

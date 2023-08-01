@@ -83,30 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return movies;
 
     }
-
-    public ArrayList<Movie> getMoviesByRating() {
-        ArrayList<Movie> movies = new ArrayList<Movie>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_GENRE, COLUMN_YEAR, COLUMN_RATING};
-
-        Cursor cursor = db.query(TABLE_MOVIE, columns, "rating == ?", null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String title = cursor.getString(1);
-                String genre = cursor.getString(2);
-                int year = cursor.getInt(3);
-                String rating = cursor.getString(4);
-                Movie obj = new Movie(id, title, genre, year, rating);
-                movies.add(obj);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return movies;
-
-    }
-
+    
     public int updateMovie(Movie movie){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

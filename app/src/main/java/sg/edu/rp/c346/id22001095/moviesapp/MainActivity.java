@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(etTitle.getText().toString().trim().length() != 0 && etGenre.getText().toString().trim().length() != 0 && etYear.getText().toString().trim().length() != 0){
                     db.insertMovie(etTitle.getText().toString(), etGenre.getText().toString(), Integer.parseInt(etYear.getText().toString()), selectedRating);
+                    Toast.makeText(MainActivity.this,"Insert Successful",Toast.LENGTH_SHORT).show();
+
                 }
                 else{
                     Toast.makeText(MainActivity.this,"Error empty fields",Toast.LENGTH_SHORT).show();
