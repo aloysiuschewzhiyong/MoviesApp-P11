@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 public class MovieList extends AppCompatActivity {
     ListView lvMovies;
     Button btnBack, btnFilter;
-    CustomAdapter ca, caFiltered;
+    CustomAdapter ca;
+    ArrayList<Movie> movies;
     Spinner spinner;
     int requestCode = 9;
 
@@ -34,7 +36,7 @@ public class MovieList extends AppCompatActivity {
 
         DBHelper db = new DBHelper(MovieList.this);
 
-        ArrayList<Movie> movies = db.getMovies();
+        movies = db.getMovies();
 
         db.close();
 
@@ -45,8 +47,7 @@ public class MovieList extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MovieList.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -66,16 +67,19 @@ public class MovieList extends AppCompatActivity {
             public void onClick(View view) {
 
                 String selectedRating = spinner.getSelectedItem().toString();
+                DBHelper db = new DBHelper(MovieList.this);
 
-                ArrayList<Movie> filteredList = new ArrayList<>();
-                for (int i = 0; i < movies.size(); i++) {
-                    Movie movie = movies.get(i);
+                ArrayList <Movie> alTmp = db.getMovies();
+                movies.clear();
+                for (int i = 0; i < alTmp.size(); i++) {
+                    Movie movie = alTmp.get(i);
                     if (movie.getRating().equals(selectedRating)) {
-                        filteredList.add(movie);
+                        movies.add(movie);
                     }
 
-                    caFiltered = new CustomAdapter(MovieList.this, R.layout.row, filteredList);
-                    lvMovies.setAdapter(caFiltered);
+                    //caFiltered = new CustomAdapter(MovieList.this, R.layout.row, filteredList);
+                    //lvMovies.setAdapter(caFiltered);
+                    ca.notifyDataSetChanged();
                 }
 
             }
@@ -89,12 +93,10 @@ public class MovieList extends AppCompatActivity {
         if(requestCode == this.requestCode && resultCode == RESULT_OK){
             DBHelper db = new DBHelper(MovieList.this);
 
-            ArrayList<Movie> movies = db.getMovies();
-
             movies.clear();
             movies.addAll(db.getMovies());
             db.close();
-            ca = new CustomAdapter(this, R.layout.row, movies);
+            //ca = new CustomAdapter(this, R.layout.row, movies);
             ca.notifyDataSetChanged();
 
         }
@@ -104,15 +106,15 @@ public class MovieList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        DBHelper db = new DBHelper(MovieList.this);
+        //Toast.makeText(this, "ABC", Toast.LENGTH_SHORT).show();
 
-        ArrayList<Movie> movies = db.getMovies();
+        DBHelper db = new DBHelper(MovieList.this);
 
         movies.clear();
         movies.addAll(db.getMovies());
         db.close();
-        ca = new CustomAdapter(this, R.layout.row, movies);
-        lvMovies.setAdapter(ca);
+        //ca = new CustomAdapter(this, R.layout.row, movies);
+        //lvMovies.setAdapter(ca);
         ca.notifyDataSetChanged();
 
 
